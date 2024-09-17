@@ -1,10 +1,10 @@
 package Core;
 
 public class CheckersComputerPlayer {
-    private CheckersLogic logic;
+    private final CheckersLogic logic;
 
     /**
-     * @name CheckersComputer
+     * @name CheckersComputerPlayer
      * @param logic
      */
     public CheckersComputerPlayer(CheckersLogic logic) {
@@ -17,7 +17,7 @@ public class CheckersComputerPlayer {
      * @return Move made from the computer
      */
     public String moveForComputer() {
-        String move = "";
+        String move;
         char[][] tempBoard = this.logic.getBoard();
 
         // Iterates through the whole board to find all the o pieces
@@ -25,23 +25,23 @@ public class CheckersComputerPlayer {
             for(int j = 0; j < tempBoard[i].length; j++) {
                 if(tempBoard[i][j] == 'o') {
                     // Checks if the piece can capture a piece or make a move
-                    if(validComputerMove(j,i,j+2,i+2)) {
-                        move = logic.convertToMove(j,i,j+2, i+2);
+                    if(validComputerMove(j, i, j + 2, i + 2)) {
+                        move = logic.convertToMove(j, i, j + 2, i + 2);
                         return move;
 
                     }
-                    else if(validComputerMove(j,i,j-2,i+2)) {
-                        move = logic.convertToMove(j,i,j-2,i+2);
+                    else if(validComputerMove(j, i, j - 2, i + 2)) {
+                        move = logic.convertToMove(j, i, j - 2, i + 2);
                         return move;
 
                     }
-                    else if(validComputerMove(j,i,j+1,i+1)) {
-                        move = logic.convertToMove(j,i,j+1,i+1);
+                    else if(validComputerMove(j, i, j + 1, i + 1)) {
+                        move = logic.convertToMove(j, i, j + 1, i + 1);
                         return move;
 
                     }
-                    else if(validComputerMove(j,i,j-1,i+1)) {
-                        move = logic.convertToMove(j,i,j-1,i+1);
+                    else if(validComputerMove(j, i, j - 1, i + 1)) {
+                        move = logic.convertToMove(j, i, j - 1, i + 1);
                         return move;
 
                     }
@@ -52,7 +52,7 @@ public class CheckersComputerPlayer {
 
         }
 
-        return "";
+        return "No more moves";
 
     }
 
@@ -74,8 +74,9 @@ public class CheckersComputerPlayer {
         if (tempBoard[yEnd][xEnd] != '_') {return false;}
 
         // Check if the piece is moving only 1 step in any direction
-        if (Math.abs(xStart - xEnd) == 1 && Math.abs(yStart - yEnd) == 1) {
-            if ((xEnd - xStart) == 1){return true;}
+        if (Math.abs(xStart - xEnd) == 1 && yEnd - yStart == 1) {
+            return true;
+
         }
 
         // Check for capturing move.
@@ -83,11 +84,8 @@ public class CheckersComputerPlayer {
             int xMiddle = (xStart + xEnd) / 2;
             int yMiddle = (yStart + yEnd) / 2;
 
-            if (tempBoard[yMiddle][xMiddle] == 'x') {
+            return tempBoard[yMiddle][xMiddle] == 'x';
 
-                return true;
-
-            }
         }
 
         return false;

@@ -10,12 +10,11 @@ import java.util.Scanner;
  * @version 2.0, 9/9/2024
  */
 public class CheckerTextConsole {
-    private CheckersLogic logic;
-    private CheckersComputerPlayer computer;
-    private CheckersGUI GUI;
-    private Scanner scanner;
+    private final CheckersLogic logic;
+    private final CheckersComputerPlayer computer;
+    private final Scanner scanner;
     // Checks if the player chose to play with a computer or player
-    private boolean computerOn;
+    private boolean computerOn = false;
 
     /**
      * @name CheckerTextConsole
@@ -23,7 +22,6 @@ public class CheckerTextConsole {
     public CheckerTextConsole() {
         this.logic = new CheckersLogic();
         this.computer = new CheckersComputerPlayer(logic);
-        this.GUI = new CheckersGUI();
         this.scanner = new Scanner(System.in);
 
     }
@@ -39,8 +37,8 @@ public class CheckerTextConsole {
         while(!valid) {
             displayBoard();
             // Asks if they want to play with a computer or another local player
-            System.out.print("Begin Game. Enter ‘P’ if you want to play against another player; enter ‘C’ to play against\n" +
-                    "computer: ");
+            System.out.print("Begin Game. Enter ‘P’ if you want to play against another player; enter ‘C’ to play against " +
+                    "computer\n");
             playerInput = scanner.nextLine();
             playerInput = playerInput.toUpperCase();
 
@@ -56,22 +54,22 @@ public class CheckerTextConsole {
 
         }
 
-        do {
+        while(!interfaceInput.equals("G") && !interfaceInput.equals("T")) {
             System.out.print("Enter 'G' if you want to use a GUI; enter 'T' to use Text console\n");
 
             interfaceInput = scanner.nextLine();
             interfaceInput = interfaceInput.toUpperCase();
-            System.out.println(interfaceInput);
 
-
-        } while(interfaceInput.equals("G") && interfaceInput.equals("T"));
+        }
 
         // Turns computer on if input is C
         if(playerInput.equals("C")) {this.computerOn = true;}
 
         if(interfaceInput.equals("G")) {
             // Launch GUI and set the computer player
+            CheckersGUI.setComputerOn(computerOn);
             Application.launch(CheckersGUI.class);
+
 
         }
         else {
@@ -99,8 +97,7 @@ public class CheckerTextConsole {
 
                     System.out.print("Choose a cell position of piece to be moved and the new position (e.g., 3a-4b): ");
                     move = scanner.nextLine();
-                    ValidateMove(move);
-                    validInput = true;
+                    validInput = ValidateMove(move);
 
                 } catch (InvalidMove e) {
                     System.out.println(e.getMessage());
@@ -122,7 +119,7 @@ public class CheckerTextConsole {
 
             // Checks if the computer is on
             // If it's on find a move for the computer
-            if(logic.isPlayerXTurn() == false && computerOn) {
+            if(!logic.isPlayerXTurn() && computerOn) {
                 String computerMove = computer.moveForComputer();
 
                 if (logic.processMove(computerMove)) {
@@ -160,7 +157,7 @@ public class CheckerTextConsole {
     /**
      * @name InvalidInput
      */
-    class InvalidInput extends Exception {
+    static class InvalidInput extends Exception {
         public InvalidInput(String input) {
             super("Invalid input: " + input);
 
@@ -190,7 +187,7 @@ public class CheckerTextConsole {
     /**
      * @name InvalidMove
      */
-    class InvalidMove extends Exception {
+    static class InvalidMove extends Exception {
         public InvalidMove(String move) {
             super("Invalid move: " + move);
 

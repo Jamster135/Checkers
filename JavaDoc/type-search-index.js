@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"Core","l":"CheckersComputerPlayer"},{"p":"Ui","l":"CheckersGUI"},{"p":"Core","l":"CheckersLogic"},{"p":"Ui","l":"CheckerTextConsole"},{"p":"<Unnamed>","l":"Main"}];updateSearchResults();

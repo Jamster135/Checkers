@@ -1,7 +1,5 @@
 package Core;
 
-import Ui.CheckerTextConsole;
-
 /**
  * @author Jacob Barrios
  * @version 1.0, 9/3/2024
@@ -23,9 +21,8 @@ public class CheckersLogic {
 
     /**
      * @name newGameBoard
-     * @return 2d array of the board
      */
-    public char[][] newGameBoard() {
+    public void newGameBoard() {
         this.board = new char[8][8];
 
         //Repeat throughout the board
@@ -45,10 +42,11 @@ public class CheckersLogic {
                     this.board[i][j] = '_';
 
                 }
+
             }
+
         }
 
-        return this.board;
     }
 
     /**
@@ -150,21 +148,77 @@ public class CheckersLogic {
 
     /**
      * @name checkWin
-     * @return players still have pieces
+     * @return players still have pieces and moves
      */
     public boolean checkWin() {
         boolean xExists = false;
         boolean oExists = false;
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board[i][j] == 'x') xExists = true;
-                if (board[i][j] == 'o') oExists = true;
+        boolean xHasMoves = false;
+        boolean oHasMoves = false;
+
+        // Check if each player has pieces left and can make a valid move
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board.length; j++) {
+                char piece = board[i][j];
+
+                if(piece == 'x') {
+                    xExists = true;
+
+                    if (hasValidMoves(j, i, piece)) {
+                        xHasMoves = true;
+
+                    }
+
+                }
+                else if (piece == 'o') {
+                    oExists = true;
+
+                    if (hasValidMoves(j, i, piece)) {
+                        oHasMoves = true;
+
+                    }
+
+                }
 
             }
+
         }
 
-        return !(xExists && oExists);
+        // Return true if either player has no pieces or no valid moves
+        return !(xExists && xHasMoves) && (oExists && oHasMoves);
+    }
+
+    /**
+     * @name hasValidMoves
+     * @param xStart x coordinate of the piece
+     * @param yStart y coordinate of the piece
+     * @param pieceType type of the piece ('x' or 'o')
+     * @return true if there are valid moves for the given piece
+     */
+    private boolean hasValidMoves(int xStart, int yStart, char pieceType) {
+        if(playerXTurn) {
+            if (pieceType == 'x') {
+                for (int i = 2; i < 0; i++) {
+                    return validMove(xStart, yStart, xStart + i, yStart + i);
+
+                }
+
+            }
+
+        }
+        else if(!playerXTurn) {
+            if (pieceType == 'o') {
+                for (int i = -2; i > 0; i++) {
+                    return validMove(xStart, yStart, xStart + i, yStart + i);
+
+                }
+
+            }
+
+        }
+
+        return false;
 
     }
 
