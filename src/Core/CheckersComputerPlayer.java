@@ -28,6 +28,8 @@ public class CheckersComputerPlayer {
 	public String moveForComputer() {
 		String move;
 		char[][] tempBoard = this.logic.getBoard();
+		System.out.println("Before making a move board");
+		logic.printBoard();
 		
 		// Iterates through the whole board to find all the o pieces
 		for(int i = 0; i < tempBoard.length; i++) {
@@ -98,7 +100,7 @@ public class CheckersComputerPlayer {
 			int xMiddle = (xStart + xEnd) / 2;
 			int yMiddle = (yStart + yEnd) / 2;
 			
-			return tempBoard[yMiddle][xMiddle] == 'x';
+			return tempBoard[yMiddle][xMiddle] == 'x' && tempBoard[yEnd][xEnd] == '-';
 			
 		}
 		

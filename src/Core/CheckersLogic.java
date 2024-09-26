@@ -9,10 +9,10 @@ package Core;
 public class CheckersLogic {
 	private char[][] board;
 	private boolean playerXTurn;
+	private boolean takingMove = true;
 	
 	/**
 	 * Constructor for the logic class
-	 *
 	 */
 	public CheckersLogic() {
 		this.board = new char[8][8];
@@ -23,7 +23,6 @@ public class CheckersLogic {
 	
 	/**
 	 * Creates a new board array and all the pieces are represented by a 'x' or 'o'
-	 *
 	 */
 	public void newGameBoard() {
 		this.board = new char[8][8];
@@ -77,8 +76,13 @@ public class CheckersLogic {
 		int xEnd = move.charAt(4) - 'a';
 		
 		if(validMove(xStart, yStart, xEnd, yEnd)) {
+//			System.out.println("Check Valid move board:");
+//			printBoard();
 			makeMove(xStart, yStart, xEnd, yEnd);
+//			System.out.println("Made move board:");
+//			printBoard();
 			
+			System.out.println("end of turn");
 			return true;
 			
 		}
@@ -145,7 +149,12 @@ public class CheckersLogic {
 			}
 			
 			if(board[yMiddle][xMiddle] == opponentPiece) {
-				board[yMiddle][xMiddle] = '_'; // Capture the piece
+//				System.out.println("Before capture piece board:");
+//				printBoard();
+				if(takingMove) {
+					board[yMiddle][xMiddle] = '_'; // Capture the piece
+					
+				}
 				return true;
 				
 			}
@@ -165,7 +174,11 @@ public class CheckersLogic {
 	 */
 	private void makeMove(int xStart, int yStart, int xEnd, int yEnd) {
 		board[yEnd][xEnd] = board[yStart][xStart];
+//		System.out.println("Check after move board:");
+//		printBoard();
 		board[yStart][xStart] = '_';
+//		System.out.println("Check get rid of start board:");
+//		printBoard();
 		playerXTurn = !playerXTurn;
 		
 	}
@@ -209,9 +222,8 @@ public class CheckersLogic {
 			}
 			
 		}
-		
 		// Return true if either player has no pieces or no valid moves
-		return !(xExists && xHasMoves) && (oExists && oHasMoves);
+		return !(xExists && xHasMoves) || (oExists && oHasMoves);
 		
 	}
 	
@@ -224,6 +236,7 @@ public class CheckersLogic {
 	 * @return true if there are valid moves for the given piece
 	 */
 	private boolean hasValidMoves(int xStart, int yStart, char pieceType) {
+		this.takingMove = false;
 		int moveDirection = (pieceType == 'x') ? -1 : 1; // Player 'x' moves up, 'o' moves down
 		
 		// Check normal move (1 step diagonal)
@@ -239,6 +252,8 @@ public class CheckersLogic {
 				return true; // If any valid capturing move is found
 			}
 		}
+		
+		this.takingMove = true;
 		
 		return false; // No valid moves found
 		
@@ -275,6 +290,17 @@ public class CheckersLogic {
 	 */
 	public boolean isPlayerXTurn() {
 		return playerXTurn;
+	}
+	
+	/**
+	 * Debugging method to see status of board whenever
+	 *
+	 */
+	public void printBoard() {
+		for(char[] row : board) {
+			System.out.println(java.util.Arrays.toString(row));
+		}
+		System.out.println("---------------------------------");
 	}
 	
 }

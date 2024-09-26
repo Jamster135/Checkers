@@ -123,7 +123,7 @@ public class CheckerTextConsole {
 			
 			// Process move and checks if a player won
 			if(logic.processMove(move)) {
-				if(logic.checkWin()) {
+				if(!logic.checkWin()) {
 					displayBoard();
 					System.out.println("Player " + (logic.isPlayerXTurn() ? "O" : "X") + " wins!");
 					break;
@@ -133,11 +133,14 @@ public class CheckerTextConsole {
 			else {
 				System.out.println("Invalid move. Try again.");
 			}
-			
+			System.out.println("Enter computer logic if");
 			// Checks if the computer is on
 			// If it's on find a move for the computer
 			if(!logic.isPlayerXTurn() && computerOn) {
+				System.out.println("Finding a move for computer");
 				String computerMove = computer.moveForComputer();
+				
+				System.out.println(computerMove);
 				
 				if(logic.processMove(computerMove)) {
 					if(logic.checkWin()) {
