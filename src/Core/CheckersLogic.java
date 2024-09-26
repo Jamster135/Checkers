@@ -1,7 +1,7 @@
 package Core;
 
 /**
- * This class checks if the move sent from the player is valid and makes the move by updating the board array
+ * This class handles all the logic of the game
  *
  * @author Jacob Barrios
  * @version 3.0, 9/16/2024
@@ -11,7 +11,8 @@ public class CheckersLogic {
 	private boolean playerXTurn;
 	
 	/**
-	 * @name CheckersLogic
+	 * Constructor for the logic class
+	 *
 	 */
 	public CheckersLogic() {
 		this.board = new char[8][8];
@@ -21,7 +22,8 @@ public class CheckersLogic {
 	}
 	
 	/**
-	 * @name newGameBoard
+	 * Creates a new board array and all the pieces are represented by a 'x' or 'o'
+	 *
 	 */
 	public void newGameBoard() {
 		this.board = new char[8][8];
@@ -51,8 +53,9 @@ public class CheckersLogic {
 	}
 	
 	/**
+	 * Gets the board array
+	 *
 	 * @return 2d array of the board
-	 * @name getBoard
 	 */
 	public char[][] getBoard() {
 		return board;
@@ -60,9 +63,11 @@ public class CheckersLogic {
 	}
 	
 	/**
+	 * Processes the move by passing it into a method to validate the move
+	 * and another method that updates the board
+	 *
 	 * @param move from player
 	 * @return if move is valid
-	 * @name processMove
 	 */
 	public boolean processMove(String move) {
 		// converts move string to index of the array
@@ -83,12 +88,15 @@ public class CheckersLogic {
 	}
 	
 	/**
+	 * Checks if the move is valid by checking
+	 * If there is a piece at the end of the move
+	 * If a piece exists where is starts
+	 *
 	 * @param xStart x coordinate of piece
 	 * @param yStart y coordinate of piece
 	 * @param xEnd   x coordinate of new move
 	 * @param yEnd   y coordinate of new move
 	 * @return if move is valid
-	 * @name validMove
 	 */
 	private boolean validMove(int xStart, int yStart, int xEnd, int yEnd) {
 		int moveDirection;
@@ -148,11 +156,12 @@ public class CheckersLogic {
 	}
 	
 	/**
+	 * Updates the board with the new move
+	 *
 	 * @param xStart x coordinate of piece
 	 * @param yStart y coordinate of piece
 	 * @param xEnd   x coordinate of new move
 	 * @param yEnd   y coordinate of new move
-	 * @name makeMove
 	 */
 	private void makeMove(int xStart, int yStart, int xEnd, int yEnd) {
 		board[yEnd][xEnd] = board[yStart][xStart];
@@ -162,8 +171,9 @@ public class CheckersLogic {
 	}
 	
 	/**
+	 * Checks if one of the players have pieces left, and moves left
+	 *
 	 * @return players still have pieces and moves
-	 * @name checkWin
 	 */
 	public boolean checkWin() {
 		boolean xExists = false;
@@ -202,48 +212,46 @@ public class CheckersLogic {
 		
 		// Return true if either player has no pieces or no valid moves
 		return !(xExists && xHasMoves) && (oExists && oHasMoves);
+		
 	}
 	
 	/**
+	 * Checks if one of the players can make a valid move
+	 *
 	 * @param xStart    x coordinate of the piece
 	 * @param yStart    y coordinate of the piece
 	 * @param pieceType type of the piece ('x' or 'o')
 	 * @return true if there are valid moves for the given piece
-	 * @name hasValidMoves
 	 */
 	private boolean hasValidMoves(int xStart, int yStart, char pieceType) {
-		if(playerXTurn) {
-			if(pieceType == 'x') {
-				for(int i = 2; i < 0; i++) {
-					return validMove(xStart, yStart, xStart + i, yStart + i);
-					
-				}
-				
+		int moveDirection = (pieceType == 'x') ? -1 : 1; // Player 'x' moves up, 'o' moves down
+		
+		// Check normal move (1 step diagonal)
+		for(int i = -1; i <= 1; i += 2) { // Check both left (-1) and right (+1)
+			if(validMove(xStart, yStart, xStart + i, yStart + moveDirection)) {
+				return true; // If any valid move is found
 			}
-			
-		}
-		else if(!playerXTurn) {
-			if(pieceType == 'o') {
-				for(int i = -2; i > 0; i++) {
-					return validMove(xStart, yStart, xStart + i, yStart + i);
-					
-				}
-				
-			}
-			
 		}
 		
-		return false;
+		// Check for capture moves (2 steps diagonal)
+		for(int i = -2; i <= 2; i += 4) { // Check both left (-2) and right (+2)
+			if(validMove(xStart, yStart, xStart + i, yStart + 2 * moveDirection)) {
+				return true; // If any valid capturing move is found
+			}
+		}
+		
+		return false; // No valid moves found
 		
 	}
 	
 	/**
-	 * @param xStart
-	 * @param yStart
-	 * @param xEnd
-	 * @param yEnd
+	 * Converts the move from the computer to a move notation to pass through the processMove method
+	 *
+	 * @param xStart x coordinate of the piece
+	 * @param yStart y coordinate of the piece
+	 * @param xEnd   x coordinate of new move
+	 * @param yEnd   y coordinate of new move
 	 * @return The move in coordinate form
-	 * @name convertToMove
 	 */
 	public String convertToMove(int xStart, int yStart, int xEnd, int yEnd) {
 		String newMove;
@@ -261,8 +269,9 @@ public class CheckersLogic {
 	}
 	
 	/**
+	 * Checks if it's player 1's turn
+	 *
 	 * @return if it is player x's turn
-	 * @name isPlayerXTurn
 	 */
 	public boolean isPlayerXTurn() {
 		return playerXTurn;

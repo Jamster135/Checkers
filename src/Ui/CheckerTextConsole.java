@@ -223,6 +223,7 @@ public class CheckerTextConsole {
 	
 	/**
 	 * Exception class that throws if a valid move is submitted
+	 *
 	 */
 	static class InvalidMove extends Exception {
 		public InvalidMove(String move) {

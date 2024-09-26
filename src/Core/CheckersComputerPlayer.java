@@ -11,8 +11,9 @@ public class CheckersComputerPlayer {
 	private final CheckersLogic logic;
 	
 	/**
-	 * @param logic
-	 * @name CheckersComputerPlayer
+	 * Constructor for the CheckersComputerPlayer
+	 *
+	 * @param logic Logic class to pass the instance of the board
 	 */
 	public CheckersComputerPlayer(CheckersLogic logic) {
 		this.logic = logic;
@@ -20,8 +21,9 @@ public class CheckersComputerPlayer {
 	}
 	
 	/**
+	 * Iterates through the board to see the first valid move a piece can make
+	 *
 	 * @return Move made from the computer
-	 * @name MoveForComputer
 	 */
 	public String moveForComputer() {
 		String move;
@@ -64,12 +66,13 @@ public class CheckersComputerPlayer {
 	}
 	
 	/**
-	 * @param xStart
-	 * @param yStart
-	 * @param xEnd
-	 * @param yEnd
+	 * Checks if the generated move from the computer is valid
+	 *
+	 * @param xStart x coordinate of piece
+	 * @param yStart y coordinate of piece
+	 * @param xEnd   x coordinate of new move
+	 * @param yEnd   y coordinate of new move
 	 * @return If the computer produced a valid move
-	 * @name validComputerMove
 	 */
 	private boolean validComputerMove(int xStart, int yStart, int xEnd, int yEnd) {
 		char[][] tempBoard = logic.getBoard();
