@@ -133,14 +133,15 @@ public class CheckerTextConsole {
 			else {
 				System.out.println("Invalid move. Try again.");
 			}
-			System.out.println("Enter computer logic if");
+//			System.out.println("Enter computer logic if");
+			
 			// Checks if the computer is on
 			// If it's on find a move for the computer
 			if(!logic.isPlayerXTurn() && computerOn) {
-				System.out.println("Finding a move for computer");
+//				System.out.println("Finding a move for computer");
 				String computerMove = computer.moveForComputer();
 				
-				System.out.println(computerMove);
+//				System.out.println(computerMove);
 				
 				if(logic.processMove(computerMove)) {
 					if(logic.checkWin()) {

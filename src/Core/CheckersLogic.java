@@ -81,8 +81,8 @@ public class CheckersLogic {
 			makeMove(xStart, yStart, xEnd, yEnd);
 //			System.out.println("Made move board:");
 //			printBoard();
-			
-			System.out.println("end of turn");
+
+//			System.out.println("end of turn");
 			return true;
 			
 		}
@@ -125,6 +125,7 @@ public class CheckersLogic {
 		// Check if the move is forward and diagonal.
 		if(playerXTurn) {
 			moveDirection = -1;
+			
 		}
 		else {
 			moveDirection = 1;
@@ -151,10 +152,11 @@ public class CheckersLogic {
 			if(board[yMiddle][xMiddle] == opponentPiece) {
 //				System.out.println("Before capture piece board:");
 //				printBoard();
-				if(takingMove) {
+				if(this.takingMove) {
 					board[yMiddle][xMiddle] = '_'; // Capture the piece
 					
 				}
+				
 				return true;
 				
 			}
@@ -242,6 +244,8 @@ public class CheckersLogic {
 		// Check normal move (1 step diagonal)
 		for(int i = -1; i <= 1; i += 2) { // Check both left (-1) and right (+1)
 			if(validMove(xStart, yStart, xStart + i, yStart + moveDirection)) {
+				this.takingMove = true;
+				
 				return true; // If any valid move is found
 			}
 		}
@@ -249,6 +253,8 @@ public class CheckersLogic {
 		// Check for capture moves (2 steps diagonal)
 		for(int i = -2; i <= 2; i += 4) { // Check both left (-2) and right (+2)
 			if(validMove(xStart, yStart, xStart + i, yStart + 2 * moveDirection)) {
+				this.takingMove = true;
+				
 				return true; // If any valid capturing move is found
 			}
 		}
@@ -294,7 +300,6 @@ public class CheckersLogic {
 	
 	/**
 	 * Debugging method to see status of board whenever
-	 *
 	 */
 	public void printBoard() {
 		for(char[] row : board) {
