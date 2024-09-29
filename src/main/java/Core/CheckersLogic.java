@@ -4,7 +4,7 @@ package Core;
  * This class handles all the logic of the game
  *
  * @author Jacob Barrios
- * @version 3.0, 9/16/2024
+ * @version 4.0, 9/30/2024
  */
 public class CheckersLogic {
 	private char[][] board;
@@ -76,13 +76,8 @@ public class CheckersLogic {
 		int xEnd = move.charAt(4) - 'a';
 		
 		if(validMove(xStart, yStart, xEnd, yEnd)) {
-//			System.out.println("Check Valid move board:");
-//			printBoard();
 			makeMove(xStart, yStart, xEnd, yEnd);
-//			System.out.println("Made move board:");
-//			printBoard();
-
-//			System.out.println("end of turn");
+			
 			return true;
 			
 		}
@@ -131,6 +126,7 @@ public class CheckersLogic {
 			moveDirection = 1;
 		}
 		
+		
 		if(Math.abs(yStart - yEnd) == 1 && Math.abs(xStart - xEnd) == 1) {
 			if((yEnd - yStart) == moveDirection) {
 				return true;
@@ -150,8 +146,6 @@ public class CheckersLogic {
 			}
 			
 			if(board[yMiddle][xMiddle] == opponentPiece) {
-//				System.out.println("Before capture piece board:");
-//				printBoard();
 				if(this.takingMove) {
 					board[yMiddle][xMiddle] = '_'; // Capture the piece
 					
@@ -176,12 +170,10 @@ public class CheckersLogic {
 	 */
 	private void makeMove(int xStart, int yStart, int xEnd, int yEnd) {
 		board[yEnd][xEnd] = board[yStart][xStart];
-//		System.out.println("Check after move board:");
-//		printBoard();
+		
 		board[yStart][xStart] = '_';
-//		System.out.println("Check get rid of start board:");
-//		printBoard();
-		playerXTurn = !playerXTurn;
+		
+		changeTurn();
 		
 	}
 	
@@ -197,12 +189,16 @@ public class CheckersLogic {
 		boolean xHasMoves = false;
 		boolean oHasMoves = false;
 		
+		boolean ogTurn = isPlayerXTurn();
+		
 		// Check if each player has pieces left and can make a valid move
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board.length; j++) {
 				char piece = board[i][j];
 				
 				if(piece == 'x') {
+					playerXTurn = true;
+					
 					xExists = true;
 					
 					if(hasValidMoves(j, i, piece)) {
@@ -212,9 +208,11 @@ public class CheckersLogic {
 					
 				}
 				else if(piece == 'o') {
+					playerXTurn = false;
 					oExists = true;
 					
 					if(hasValidMoves(j, i, piece)) {
+						
 						oHasMoves = true;
 						
 					}
@@ -224,8 +222,11 @@ public class CheckersLogic {
 			}
 			
 		}
+		
+		playerXTurn = ogTurn;
+		
 		// Return true if either player has no pieces or no valid moves
-		return !(xExists && xHasMoves) || (oExists && oHasMoves);
+		return !xExists || !xHasMoves || !oExists || !oHasMoves;
 		
 	}
 	
@@ -239,11 +240,20 @@ public class CheckersLogic {
 	 */
 	private boolean hasValidMoves(int xStart, int yStart, char pieceType) {
 		this.takingMove = false;
-		int moveDirection = (pieceType == 'x') ? -1 : 1; // Player 'x' moves up, 'o' moves down
+		int moveDirection; // Player 'x' moves up, 'o' moves down
+		
+		if(pieceType == 'x') {
+			moveDirection = -1;
+			
+		}
+		else {
+			moveDirection = 1;
+			
+		}
 		
 		// Check normal move (1 step diagonal)
 		for(int i = -1; i <= 1; i += 2) { // Check both left (-1) and right (+1)
-			if(validMove(xStart, yStart, xStart + i, yStart + moveDirection)) {
+			if(validMove(xStart, yStart, xStart + i, yStart + (moveDirection))) {
 				this.takingMove = true;
 				
 				return true; // If any valid move is found
@@ -252,7 +262,7 @@ public class CheckersLogic {
 		
 		// Check for capture moves (2 steps diagonal)
 		for(int i = -2; i <= 2; i += 4) { // Check both left (-2) and right (+2)
-			if(validMove(xStart, yStart, xStart + i, yStart + 2 * moveDirection)) {
+			if(validMove(xStart, yStart, xStart + i, yStart + (2 * moveDirection))) {
 				this.takingMove = true;
 				
 				return true; // If any valid capturing move is found
@@ -299,13 +309,11 @@ public class CheckersLogic {
 	}
 	
 	/**
-	 * Debugging method to see status of board whenever
+	 * Manually changing the players turn
 	 */
-	public void printBoard() {
-		for(char[] row : board) {
-			System.out.println(java.util.Arrays.toString(row));
-		}
-		System.out.println("---------------------------------");
+	public void changeTurn() {
+		playerXTurn = !playerXTurn;
+		
 	}
 	
 }

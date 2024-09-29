@@ -40,7 +40,7 @@ public class CheckerTextConsole {
 		boolean valid = false;
 		String playerInput = "";
 		String interfaceInput = "";
-		
+
 		while(!valid) {
 			displayBoard();
 			// Asks if they want to play with a computer or another local player
@@ -48,42 +48,42 @@ public class CheckerTextConsole {
 					"computer\n");
 			playerInput = scanner.nextLine();
 			playerInput = playerInput.toUpperCase();
-			
+
 			// invalid input exception, throws any input that is not C or P
 			try {
 				valid = ValidateInput(playerInput);
-				
+
 			}
 			catch(InvalidInput ex) {
 				System.out.println(ex.getMessage());
-				
+
 			}
-			
+
 		}
-		
+
 		while(!interfaceInput.equals("G") && !interfaceInput.equals("T")) {
 			System.out.print("Enter 'G' if you want to use a GUI; enter 'T' to use Text console\n");
-			
+
 			interfaceInput = scanner.nextLine();
 			interfaceInput = interfaceInput.toUpperCase();
-			
+
 		}
-		
+
 		// Turns computer on if input is C
 		if(playerInput.equals("C")) {
 			this.computerOn = true;
 		}
-		
+
 		if(interfaceInput.equals("G")) {
 			// Launch GUI and set the computer player
 			CheckersGUI.setComputerOn(computerOn);
 			Application.launch(CheckersGUI.class);
-			
-			
+
+
 		}
 		else {
 			startGame();
-			
+
 		}
 		
 	}
@@ -123,7 +123,7 @@ public class CheckerTextConsole {
 			
 			// Process move and checks if a player won
 			if(logic.processMove(move)) {
-				if(!logic.checkWin()) {
+				if(logic.checkWin()) {
 					displayBoard();
 					System.out.println("Player " + (logic.isPlayerXTurn() ? "O" : "X") + " wins!");
 					break;
@@ -133,15 +133,11 @@ public class CheckerTextConsole {
 			else {
 				System.out.println("Invalid move. Try again.");
 			}
-//			System.out.println("Enter computer logic if");
 			
 			// Checks if the computer is on
 			// If it's on find a move for the computer
 			if(!logic.isPlayerXTurn() && computerOn) {
-//				System.out.println("Finding a move for computer");
 				String computerMove = computer.moveForComputer();
-				
-//				System.out.println(computerMove);
 				
 				if(logic.processMove(computerMove)) {
 					if(logic.checkWin()) {

@@ -5,7 +5,7 @@ package Core;
  * Generates a move based on what pieces are available and sends it to logic for check
  *
  * @author Jacob Barrios
- * @version 1.0 9/9/24
+ * @version 1.0, 9/9/24
  */
 public class CheckersComputerPlayer {
 	private final CheckersLogic logic;
@@ -28,8 +28,6 @@ public class CheckersComputerPlayer {
 	public String moveForComputer() {
 		String move;
 		char[][] tempBoard = this.logic.getBoard();
-//		System.out.println("Before making a move board");
-//		logic.printBoard();
 		
 		// Iterates through the whole board to find all the o pieces
 		for(int i = 0; i < tempBoard.length; i++) {
@@ -82,6 +80,7 @@ public class CheckersComputerPlayer {
 		// Check if the move is within bounds and the target cell is empty.
 		if(xStart < 0 || xStart >= 8 || yStart < 0 || yStart >= 8 || xEnd < 0 || xEnd >= 8 || yEnd < 0 || yEnd >= 8) {
 			return false;
+			
 		}
 		
 		// Is the coordinate the piece wants to move to empty
